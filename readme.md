@@ -1,4 +1,4 @@
-## 基于 Serverless CLI 和腾讯云的 Todo List 应用
+## 基于 Serverless CLI 和腾讯云的 shortenUrl 短链接应用
 
 ### 前置条件
 
@@ -11,13 +11,13 @@
 
 -   根目录中新建 `.env`文件，填写`redis` 数据库信息，以及网络配置, 具体步骤和架构请参考下面的**项目架构**部分
 -   根目录执行 `sls deploy`, 命令行会自动分别部署`backend, frontend` 项目
--   打开 `todos-frontend` 输出的 `website` 地址即可看到项目前端，进行操作
+-   打开 `shortenUrl-frontend` 输出的 `website` 地址即可看到项目前端，进行操作
 
 ### 项目架构
 
-此 **shortenUrl** 项目采取前后端分离的架构，前端提供页面 Ui 展示和功能操作， 后端提供 API 和数据库操作. 项目提供了:
+此 **shortenUrl** 项目采取前后端分离的架构，前端提供页面 UI 展示和功能操作， 后端提供 API 和数据库操作. 项目提供了:
 
-1. 密码登陆, 只有登陆成功才可以进行 新增 url 以及删除操作，防止非权限人员误删
+1. 密码登陆, 只有登陆成功才可以进行 新增 url 以及删除操作，防止非权限人员误操作
 2. 新增 url
 3. 删除 url
 4. url 地址校验
@@ -33,7 +33,7 @@
 
 需要准备:
 
-1. 首先需要手动在腾讯云开通和配置**redis**数据库, 参考: https://cloud.tencent.com/document/product/239/30821。 在腾讯云成功开通 **Redis** 数据库之后，在项目根目录新建 `.env` 文件，然后将数据库的 `host, port, password` 存在`.env`, 同时需要将配置的**所属网络(必须和项目所在区域相同)，所属子网**的字段配置在`.env`中:
+1. 首先需要手动在腾讯云开通和配置**redis**数据库, 参考: https://cloud.tencent.com/document/product/239/30821。 在腾讯云成功开通 **Redis** 数据库之后，在项目根目录新建 `.env` 文件，然后将数据库的 `host, port, password` 存在`.env`, 同时需要将配置的**所属网络 vpcId(必须和项目所在区域相同)，所属子网 subnetId**的字段配置在`.env`中:
 2. `.env` 中添加`authPass` 作为登陆密码
 
 ```bash
@@ -73,3 +73,4 @@ authPass=xxxx
 -   项目命令行部署: ![](./assets/deployment.jpg)
 -   登陆界面: ![](./assets/login.png)
 -   主界面: ![](./assets/homepage.png)
+-   url 校验: ![](./assets/invalidUrl.png)

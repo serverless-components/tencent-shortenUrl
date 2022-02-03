@@ -45,7 +45,11 @@ function App() {
     <div className="app">
       <h1>
         使用 Serverless + Tencent Cloud 构建的
-        <a href="https://github.com/serverless-components/tencent-shortenUrl">
+        <a
+          target={"_blank"}
+          rel="noreferrer"
+          href="https://github.com/serverless-components/tencent-shortenUrl"
+        >
           shortenUrl 短链接服务
         </a>
       </h1>
@@ -59,6 +63,8 @@ function App() {
               <a
                 style={{ minWidth: 100 }}
                 href={`${window.env.apiUrl}${item.urlKey}`}
+                target={"_blank"}
+                rel="noreferrer"
               >
                 {item.urlKey}
               </a>
