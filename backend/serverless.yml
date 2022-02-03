@@ -1,0 +1,32 @@
+component: http
+name: shortenUrl-backend
+inputs:
+  src:
+    src: ./
+    exclude:
+      - .env
+  faas:
+    runtime: Nodejs14.18
+    timeout: 100
+    framework: koa
+    name: ${name}
+    installDependency: true
+    vpc:
+      vpcId: ${env:vpcId}
+      subnetId: ${env:subnetId}
+    environments:
+      - key: redis_port
+        value: ${env:redis_port}
+      - key: redis_host
+        value: ${env:redis_host}
+      - key: redis_password
+        value: ${env:redis_password}
+      - key: authPass
+        value: ${env:authPass}
+  apigw:
+    api:
+      cors: true
+    protocols:
+      - http
+      - https
+    environment: release
