@@ -8,7 +8,6 @@
 1. `Node.js` >= 12
 2. [安装](https://cn.serverless.com/framework/docs-getting-started) `serverless` 命令行工具
 3. [注册](https://cloud.tencent.com/register)腾讯云账号并[开通](https://cloud.tencent.com/document/product/1154/43006)权限
-4. 开通[腾讯云 Redis 数据库](https://cloud.tencent.com/document/product/239/30821)
 
 ### 项目架构
 
