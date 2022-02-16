@@ -33,7 +33,7 @@
 1. 当前 _PGSQL for Serverless_ 仅支持 `北京三区，广州二区，上海二区` 三个地域的创建和部署:
     1. 在填写 `backend/serverless.yml` 中的地域可用区时需要注意填写为正确的地域
     2. `backend/serverless.yml` 中我们所使用的`vpc`配置 是在*vpc*目录下生成的结果: `${output:${stage}:${app}:shortenUrl-vpc.vpcId}`，所以需要确保`vpc`目录实例下的地域选择为正确的地域
-2. PostgreSQL 组件当前暂不支持 CLI 扫描二维码登录，因此您需要在 根目录`.env` 文件中填写信息来配置持久的环境变量/秘钥信息, [详情](https://github.com/serverless-components/tencent-postgresql#4-%E8%B4%A6%E5%8F%B7%E9%85%8D%E7%BD%AE)
+2. PostgreSQL 组件当前暂不支持 CLI 扫描二维码登录，因此您需要配置[全局认证信息](https://cn.serverless.com/framework/docs-commands-credentials)或者在根目录`.env` 文件中填写信息来配置持久的环境变量/秘钥信息, [详情](https://github.com/serverless-components/tencent-postgresql#4-%E8%B4%A6%E5%8F%B7%E9%85%8D%E7%BD%AE)
 
 ```bash
 # .env
