@@ -34,7 +34,17 @@ subnetId=xxxx
 ```
 
 部署成功之后，可以在腾讯云云数据库中的*PostgreSQL* 中看到对应实例.
-**注意事项**: 当前 _PGSQL for Serverless_ 仅支持 `北京三区，广州二区，上海二区` 三个地域的创建和部署，因此在填写 yaml 中的地域可用区时需要注意填写为正确的地域和对应的 VPC 子网信息。
+
+**注意事项**:
+
+1. 当前 _PGSQL for Serverless_ 仅支持 `北京三区，广州二区，上海二区` 三个地域的创建和部署，因此在填写 yaml 中的地域可用区时需要注意填写为正确的地域和对应的 VPC 子网信息。
+2. PostgreSQL 组件当前暂不支持 CLI 扫描二维码登录，因此您需要在 `.env` 文件中填写信息来配置持久的环境变量/秘钥信息, [详情](https://github.com/serverless-components/tencent-postgresql#4-%E8%B4%A6%E5%8F%B7%E9%85%8D%E7%BD%AE)
+
+```bash
+# .env
+TENCENT_SECRET_ID=123
+TENCENT_SECRET_KEY=123
+```
 
 #### 后端结构
 
@@ -48,8 +58,6 @@ subnetId=xxxx
 -   `.env` 中添加`authPass` 作为登陆密码
 
 ```bash
-vpcId=xxxx
-subnetId=xxxx
 authPass=xxxx
 ```
 
