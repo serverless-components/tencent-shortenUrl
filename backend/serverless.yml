@@ -12,8 +12,8 @@ inputs:
     name: ${name}
     installDependency: true
     vpc:
-      vpcId: ${env:vpcId}
-      subnetId: ${env:subnetId}
+      vpcId: ${output:${stage}:${app}:shortenUrl-vpc.vpcId}
+      subnetId: ${output:${stage}:${app}:shortenUrl-vpc.subnetId}
     environments:
       - key: dbConnUrl
         value: ${output:${stage}:${app}:shortenUrl-db.private.connectionString}

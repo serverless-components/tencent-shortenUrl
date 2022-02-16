@@ -7,12 +7,6 @@
 3. [注册](https://cloud.tencent.com/register)腾讯云账号并[开通](https://cloud.tencent.com/document/product/1154/43006)权限
 4. 开通[腾讯云 Redis 数据库](https://cloud.tencent.com/document/product/239/30821)
 
-### 使用流程
-
--   根目录中新建 `.env`文件，填写`vpcId, subnetId`网络配置, 具体步骤和架构请参考下面的**项目架构**部分
--   根目录执行 `sls deploy`, 命令行会自动分别部署`db, backend, frontend` 项目
--   打开 `shortenUrl-frontend` 输出的 `website` 地址即可看到项目前端，进行操作
-
 ### 项目架构
 
 此 **shortenUrl** 项目采取前后端分离的架构，前端提供页面 UI 展示和功能操作， 后端提供 API 和数据库操作. 项目提供了:
@@ -24,21 +18,22 @@
 
 根目录`serverless.yml`定义了`app, stage` 字段，因为需要确保模版下的组件使用相同的`app, stage` 字段，用户可自行修改需要的值
 
+#### VPC 配置结构
+
+`vpc` 目录下是帮助用户执行创建 **db** 和 **backend** 所需要的网络环境, 所创建的**vpc**和**subnet**提供给**db**和**backend**使用，用户可以自行修改，但是如果继续给**db, backend** 使用的话，**必须保证地域配置的正确性**, 比如**postgresql** 仅支持 `北京三区，广州二区，上海二区`, 那么`vpc/serverless.yml` 就必须选择这三个地域之一。
+
 #### 数据库结构
 
-*db*目录下是使用[tencent-postgresql](https://github.com/serverless-components/tencent-postgresql) 组件来执行对 postgresql 数据库的创建,只需要您在根目录的`.env` 添加**vpcId, subnetId** 即可。
-
-```bash
-vpcId=xxx
-subnetId=xxxx
-```
+`db` 目录下是使用[tencent-postgresql](https://github.com/serverless-components/tencent-postgresql) 组件来执行对 postgresql 数据库的创建
 
 部署成功之后，可以在腾讯云云数据库中的*PostgreSQL* 中看到对应实例.
 
 **注意事项**:
 
-1. 当前 _PGSQL for Serverless_ 仅支持 `北京三区，广州二区，上海二区` 三个地域的创建和部署，因此在填写 yaml 中的地域可用区时需要注意填写为正确的地域和对应的 VPC 子网信息。
-2. PostgreSQL 组件当前暂不支持 CLI 扫描二维码登录，因此您需要在 `.env` 文件中填写信息来配置持久的环境变量/秘钥信息, [详情](https://github.com/serverless-components/tencent-postgresql#4-%E8%B4%A6%E5%8F%B7%E9%85%8D%E7%BD%AE)
+1. 当前 _PGSQL for Serverless_ 仅支持 `北京三区，广州二区，上海二区` 三个地域的创建和部署:
+    1. 在填写 `backend/serverless.yml` 中的地域可用区时需要注意填写为正确的地域
+    2. `backend/serverless.yml` 中我们所使用的`vpc`配置 是在*vpc*目录下生成的结果: `${output:${stage}:${app}:shortenUrl-vpc.vpcId}`，所以需要确保`vpc`目录实例下的地域选择为正确的地域
+2. PostgreSQL 组件当前暂不支持 CLI 扫描二维码登录，因此您需要在 根目录`.env` 文件中填写信息来配置持久的环境变量/秘钥信息, [详情](https://github.com/serverless-components/tencent-postgresql#4-%E8%B4%A6%E5%8F%B7%E9%85%8D%E7%BD%AE)
 
 ```bash
 # .env
@@ -61,7 +56,10 @@ TENCENT_SECRET_KEY=123
 authPass=xxxx
 ```
 
-`backend/serverless.yml`中使用了`db`项目提供的数据库链接: `${output:${stage}:${app}:shortenUrl-db.private.connectionString}`, 其中`shortenUrl-db`是数据库实例项目的名称，如果`db/serverless.yml` 中的*name* 被修改，请记得把这里的参数也相应修改。
+**注意事项**:
+
+1. `backend/serverless.yml`中使用了`db`项目提供的数据库链接: `${output:${stage}:${app}:shortenUrl-db.private.connectionString}`, 其中`shortenUrl-db`是数据库实例项目的名称，如果`db/serverless.yml` 中的*name* 被修改，请记得把这里的参数也相应修改。
+2. `backend/serverless.yml` 中我们所使用的`vpc`配置 是在*vpc*目录下生成的结果: `${output:${stage}:${app}:shortenUrl-vpc.vpcId}`，所以需要确保`vpc`目录实例下的地域选择为正确的地域
 
 后端项目成功部署后，会在腾讯云 scf 中自动部署一个名为`shortenUrl-backend`的项目，用户可在其中查看日志或者函数配置
 
@@ -80,6 +78,11 @@ authPass=xxxx
 1. `sls deploy` 之后，会在用户的`shorten-url-frontend` bucket 生成一个 `env.js` 文件，需要将其下载到`frontend/public` 文件夹中。 之所以在本地开发的时候需要这个文件是因为这个文件会把后端 API 的地址自动注入`window.env` 中，供前端 API 访问使用， 所以本地开发的时候需要手动下载。 线上项目会自动获取。
 2. 进入`frontend`文件夹下，执行`npm install` 安装依赖
 3. 执行 `npm start` 本地运行项目
+
+### 部署流程
+
+-   根目录执行 `sls deploy`, 命令行会自动分别部署`vpc, db, backend, frontend` 项目
+-   打开 `shortenUrl-frontend` 输出的 `website` 地址即可看到项目前端，进行操作
 
 ### 效果截图
 

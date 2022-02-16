@@ -1,0 +1,9 @@
+# serverless.yml
+component: vpc # (required) name of the component. In that case, it's vpc.
+name: shortenUrl-vpc # (required) name of your vpc component instance.
+
+inputs:
+  region: ap-guangzhou
+  zone: ap-guangzhou-2
+  vpcName: Default-VPC
+  subnetName: shortenUrl-subnet

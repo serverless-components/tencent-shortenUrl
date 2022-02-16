@@ -7,6 +7,6 @@ inputs:
   zone: ap-guangzhou-2 # 可选 ap-guangzhou-2, ap-shanghai-2, ap-beijing-3
   dBInstanceName: shortenUrl-db
   vpcConfig:
-    vpcId: ${env:vpcId}
-    subnetId: ${env:subnetId}
+    vpcId: ${output:${stage}:${app}:shortenUrl-vpc.vpcId}
+    subnetId: ${output:${stage}:${app}:shortenUrl-vpc.subnetId}
   extranetAccess: false
