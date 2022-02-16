@@ -4,8 +4,9 @@ import koaBasicAuth from "koa-basic-auth";
 import koaBody from "koa-body";
 import isValidHttpUrl from "is-valid-http-url";
 
-import { getUrl, deleteUrl, listUrls, addUrl } from "./db.js";
+import { getUrl, deleteUrl, listUrls, addUrl, checkTable } from "./db.js";
 
+await checkTable();
 const app = new Koa();
 const router = new KoaRouter();
 

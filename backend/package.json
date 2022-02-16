@@ -10,12 +10,13 @@
   "author": "yugasun",
   "license": "MIT",
   "dependencies": {
-    "ioredis": "^4.28.3",
     "is-valid-http-url": "^1.0.3",
+    "knex": "^1.0.3",
     "koa": "^2.11.0",
     "koa-basic-auth": "^4.0.0",
     "koa-body": "^4.2.0",
     "koa-router": "^8.0.8",
+    "pg": "^8.7.3",
     "shortid": "^2.2.16"
   }
 }

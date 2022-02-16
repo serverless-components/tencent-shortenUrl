@@ -15,12 +15,8 @@ inputs:
       vpcId: ${env:vpcId}
       subnetId: ${env:subnetId}
     environments:
-      - key: redis_port
-        value: ${env:redis_port}
-      - key: redis_host
-        value: ${env:redis_host}
-      - key: redis_password
-        value: ${env:redis_password}
+      - key: dbConnUrl
+        value: ${output:${stage}:${app}:shortenUrl-db.private.connectionString}
       - key: authPass
         value: ${env:authPass}
   apigw:

@@ -9,8 +9,8 @@
 
 ### 使用流程
 
--   根目录中新建 `.env`文件，填写`redis` 数据库信息，以及网络配置, 具体步骤和架构请参考下面的**项目架构**部分
--   根目录执行 `sls deploy`, 命令行会自动分别部署`backend, frontend` 项目
+-   根目录中新建 `.env`文件，填写`vpcId, subnetId`网络配置, 具体步骤和架构请参考下面的**项目架构**部分
+-   根目录执行 `sls deploy`, 命令行会自动分别部署`db, backend, frontend` 项目
 -   打开 `shortenUrl-frontend` 输出的 `website` 地址即可看到项目前端，进行操作
 
 ### 项目架构
@@ -24,33 +24,38 @@
 
 根目录`serverless.yml`定义了`app, stage` 字段，因为需要确保模版下的组件使用相同的`app, stage` 字段，用户可自行修改需要的值
 
+#### 数据库结构
+
+*db*目录下是使用[tencent-postgresql](https://github.com/serverless-components/tencent-postgresql) 组件来执行对 postgresql 数据库的创建,只需要您在根目录的`.env` 添加**vpcId, subnetId** 即可。
+
+```bash
+vpcId=xxx
+subnetId=xxxx
+```
+
+部署成功之后，可以在腾讯云云数据库中的*PostgreSQL* 中看到对应实例.
+**注意事项**: 当前 _PGSQL for Serverless_ 仅支持 `北京三区，广州二区，上海二区` 三个地域的创建和部署，因此在填写 yaml 中的地域可用区时需要注意填写为正确的地域和对应的 VPC 子网信息。
+
 #### 后端结构
 
 `backend` 文件夹中即为后端项目目录:
 
--   使用腾讯云 Redis 作为 url 以及对应`shorten key` 数据存储
+-   使用上面配置的的**db**实例的输出作为数据库的 url 来实现对应`shorten key` 数据存储
 -   使用[tencent-http](https://github.com/serverless-components/tencent-http) + [koajs](https://koajs.com/) 作为技术选型
 
 需要准备:
 
-1. 首先需要手动在腾讯云开通和配置**redis**数据库, 参考: https://cloud.tencent.com/document/product/239/30821。 在腾讯云成功开通 **Redis** 数据库之后，在项目根目录新建 `.env` 文件，然后将数据库的 `host, port, password` 存在`.env`, 同时需要将配置的**所属网络 vpcId(必须和项目所在区域相同)，所属子网 subnetId**的字段配置在`.env`中:
-2. `.env` 中添加`authPass` 作为登陆密码
+-   `.env` 中添加`authPass` 作为登陆密码
 
 ```bash
-redis_port=xxxx
-redis_host=xxxx
-redis_password=xxxx
 vpcId=xxxx
 subnetId=xxxx
 authPass=xxxx
 ```
 
+`backend/serverless.yml`中使用了`db`项目提供的数据库链接: `${output:${stage}:${app}:shortenUrl-db.private.connectionString}`, 其中`shortenUrl-db`是数据库实例项目的名称，如果`db/serverless.yml` 中的*name* 被修改，请记得把这里的参数也相应修改。
+
 后端项目成功部署后，会在腾讯云 scf 中自动部署一个名为`shortenUrl-backend`的项目，用户可在其中查看日志或者函数配置
-
-**注意事项**:
-
--   Redis 数据库的开通地域需要和项目的部署地域相同，比如`backend/serverless.yml` 中的**region**为*shanghai*, Redis 也需要在*shanghai*地域开通，并且保证配置合理互通的网络，[参考](https://cloud.tencent.com/document/product/239/30910)
--   要为 redis 配置网络的话，需要有一个和 redis 所属地区完全相同的网络配置才可以找到。比如 Redis 在上海一区，那么需要有一个属于上海一区的子网，才可以为 redis 进行分配。
 
 #### 前端结构
 
