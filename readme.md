@@ -52,7 +52,7 @@ TENCENT_SECRET_KEY=123
 
 需要准备:
 
--   `.env` 中添加`authPass` 作为登陆密码
+-  ⚠️⚠️ `.env` 中添加`authPass` 作为登陆密码
 
 ```bash
 authPass=xxxx
